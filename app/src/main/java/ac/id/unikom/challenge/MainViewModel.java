@@ -6,15 +6,14 @@ import androidx.lifecycle.ViewModel;
 
 public class MainViewModel extends ViewModel {
 
-    private final MutableLiveData<String> kilometer = new MutableLiveData<>();
-    private final MutableLiveData<String> centimeter = new MutableLiveData<>();
+    private final Meter model = new Meter();
 
     public LiveData<String> getKilometer() {
-        return kilometer;
+        return model.getKilometer();
     }
 
     public LiveData<String> getCentimeter() {
-        return centimeter;
+        return model.getCentimeter();
     }
 
     public void calculateLength(String meterInput) {
@@ -23,11 +22,8 @@ public class MainViewModel extends ViewModel {
         }
 
         double parsedMeter = Double.parseDouble(meterInput);
-        
-        double kilometerValue = parsedMeter / 1000;
-        kilometer.setValue(String.valueOf(kilometerValue));
-        
-        double centimeterValue = parsedMeter * 100;
-        centimeter.setValue(String.valueOf(centimeterValue));
+        model.setMeter(parsedMeter);
+        model.toKilometer();
+        model.toCentimeter();
     }
 }
