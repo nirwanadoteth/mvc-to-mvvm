@@ -1,37 +1,37 @@
 package ac.id.unikom.challenge;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity implements MainView{
+public class MainActivity extends AppCompatActivity {
 
     private EditText meter;
     private EditText kilometer;
     private EditText centimeter;
-    private MainController controller;
-    private Meter model;
+    private MainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        controller = new MainController(this);
-        model = Meter.getInstance();
+        
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         initView();
-        observeModel();
+        observeViewModel();
     }
 
-    private void observeModel() {
-        model.getCentimeter().observe(this, centimeter -> {
+    private void observeViewModel() {
+        viewModel.getCentimeter().observe(this, centimeter -> {
             this.centimeter.setText(centimeter);
         });
 
-        model.getKilometer().observe(this, kilometer -> {
+        viewModel.getKilometer().observe(this, kilometer -> {
             this.kilometer.setText(kilometer);
         });
     }
@@ -54,20 +54,8 @@ public class MainActivity extends AppCompatActivity implements MainView{
 
             @Override
             public void afterTextChanged(Editable editable) {
-                controller.calculateLength();
+                viewModel.calculateLength(meter.getText().toString());
             }
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        controller = null;
-        Meter.destroy();
-        super.onDestroy();
-    }
-
-    @Override
-    public String getMeter() {
-        return meter.getText().toString();
     }
 }

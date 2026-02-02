@@ -4,29 +4,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class Meter {
-    private static Meter instance;
 
     private double meter;
 
     private MutableLiveData<String> kilometer;
     private MutableLiveData<String> centimeter;
 
-    private Meter() {
+    public Meter() {
         this.meter = 0;
         this.kilometer = new MutableLiveData<>();
         this.centimeter = new MutableLiveData<>();
-    }
-
-    public static synchronized Meter getInstance() {
-        if (instance == null) {
-            instance = new Meter();
-        }
-
-        return instance;
-    }
-
-    public static void destroy() {
-        instance = null;
     }
 
     public LiveData<String> getKilometer() {
